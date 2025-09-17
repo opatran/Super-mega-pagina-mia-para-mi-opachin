@@ -1,0 +1,195 @@
+/* ----------------------------
+   Fondo principal de la página
+----------------------------- */
+body {
+  margin: 0;
+  padding: 0;
+  background-image: url('fondo.png');    /* Imagen de fondo principal */
+  background-repeat: repeat-y;           /* Se repite verticalmente */
+  background-size: contain;              /* Quepa bien sin estirarse */
+  background-position: top center;       /* Centrado arriba */
+  background-color: black;               /* Color de fondo de respaldo */
+  font-family: Arial, sans-serif;
+  text-align: center;
+  overflow-x: hidden;                    /* Evita desplazamiento lateral */
+  position: relative;
+  z-index: 0;
+}
+
+/* ----------------------------
+   Capa de fondo con burbujas
+----------------------------- */
+.burbujas-fondo {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('burbujas.gif');
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
+  z-index: -1;              /* Detrás del contenido */
+  pointer-events: none;     /* No bloquea clics */
+}
+
+/* ----------------------------
+   Contenedor del título (GIF)
+----------------------------- */
+.titulo-container {
+  margin-top: 40px;
+}
+
+.titulo-gif {
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+}
+
+/* ----------------------------
+   Video con flecha
+----------------------------- */
+.video-container {
+  display: inline-block;
+  position: relative;
+  margin-top: 30px;
+}
+
+.flecha {
+  position: absolute;
+  top: 50%;
+  left: -300px;
+  transform: translateY(-50%);
+  width: 300px;
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ----------------------------
+   Botón de biblioteca
+----------------------------- */
+.boton-biblioteca-container {
+  margin-top: 80px;
+  text-align: right;
+}
+
+.boton-biblioteca {
+  width: 450px;
+  height: auto;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.boton-biblioteca:hover {
+  content: url('boton-biblioteca-hover.png');
+}
+
+/* ----------------------------
+   Botón del minijuego
+----------------------------- */
+.boton-minijuego-container {
+  margin-top: 120px;
+  margin-left: 120px;
+  text-align: left;
+}
+
+.boton-minijuego {
+  width: 200px;
+  height: auto;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+p {
+  font-size: 22px;
+  line-height: 1.5;
+}
+
+.frase-centro {
+  max-width: 800px; /* Ajusta el ancho máximo para que encaje en la parte verde */
+  margin: 0 auto;   /* Centra el contenedor horizontalmente */
+  padding: 0 20px;  /* Espacio interno para que no quede pegado */
+  text-align: center;
+  color: black;     /* O el color que prefieras */
+  font-weight: bold;
+  font-size: 1.5rem; /* Tamaño de texto grande */
+}
+
+.boton-minijuego-container {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Espacio entre el botón y la flecha */
+  margin-top: 120px;  /* Mantén tu margen actual */
+  margin-left: 120px; /* Mantén tu margen actual */
+}
+
+.boton-minijuego {
+  width: 200px; /* El tamaño que tenías para el botón */
+  height: auto;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.flecha-personalizada2 {
+  width: 180px; /* Ajusta el tamaño de la flecha aquí */
+  height: auto;
+  user-select: none;
+  pointer-events: none; /* Para que no interfiera con clics */
+}
+
+/* ---------------------------- 
+   Fuente navideña para el cronómetro y la puntuación
+----------------------------- */
+@import url('https://fonts.googleapis.com/css2?family=Mountains+of+Christmas&display=swap');  /* Fuente de Google Fonts */
+
+#letrero-izquierdo,
+#letrero-derecho {
+  position: absolute;
+  top: 10px;
+  font-size: 40px;             /* Aumentamos el tamaño para hacerlo más visible */
+  font-weight: bold;
+  color: #ffff00;              /* Amarillo brillante */
+  text-shadow: 3px 3px 6px black;
+  font-family: 'Mountains of Christmas', cursive; /* Fuente navideña */
+}
+
+#letrero-izquierdo {
+  left: 100px;
+}
+
+#letrero-derecho {
+  right: 100px;
+}
+
+/* Contenedor para el GIF y la flecha (uno encima del otro) */
+.gif-flecha-container {
+  display: flex;
+  flex-direction: column; /* ordena en vertical */
+  align-items: center;    /* centra horizontalmente */
+  gap: 5px;               /* espacio entre el gif y la flecha */
+}
+
+/* El GIF que va encima */
+.gif-encima {
+  width: 280px; /* Puedes ajustar esto si el GIF es muy grande o pequeño */
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+.volver-inicio {
+  margin-top: 40px;
+  text-align: center;
+}
+
+.boton-minijuego {
+  width: 200px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.boton-minijuego:hover {
+  transform: scale(1.05);
+}
+

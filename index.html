@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Página de Opatran</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+  <!-- Fondo de burbujas animado -->
+  <div class="burbujas-fondo"></div>
+
+  <!-- Título como GIF -->
+  <div class="titulo-container">
+    <img src="titulo.gif" alt="Título con GIF" class="titulo-gif" />
+
+    <div class="frase-centro">
+      <h2>Gracias a todo el apoyo de los fans y su dinero hemos creado yo y el equipo josué una página web donde pueden venir todos los fans de coche alrededor de todo el planeta tierra, esto se merece un musical.</h2>
+    </div>
+  </div>
+
+  <p>No estoy muy seguro de qué hacer acá</p>
+  <p>Deberían ver este video, a mí me gusta mazo</p>
+
+  <!-- Contenedor del video -->
+  <div class="video-container">
+    <iframe width="400" height="225" src="https://www.youtube.com/embed/bKkp8BFIEj8?"
+      title="Video" frameborder="0" allowfullscreen></iframe>
+    <img src="flecha-personalizada.png" alt="Flecha personalizada" class="flecha" />
+  </div>
+
+  <!-- Botón de biblioteca -->
+  <div class="boton-biblioteca-container">
+    <a href="biblioteca.html">
+      <img src="boton-biblioteca.png" alt="Ir a la biblioteca" class="boton-biblioteca" />
+    </a>
+  </div>
+
+  <!-- Botón de minijuego con gif y flecha a la derecha -->
+  <div class="boton-minijuego-container">
+    <a href="minijuegosanta.html">
+      <img src="boton-minijuego.png" alt="Ir al minijuego" class="boton-minijuego" />
+    </a>
+
+    <div class="gif-flecha-container">
+      <img src="vspapanoel.gif" alt="Papá Noel animado" class="gif-encima" />
+      <img src="flecha-personalizada2.png" alt="Flecha personalizada para minijuego" class="flecha-personalizada2" />
+    </div>
+  </div>
+
+  <!-- Audios ocultos -->
+  <audio id="hover-sound" src="hover.mp3" preload="auto"></audio>
+  <audio id="hover-sound-minijuego" src="hover-minijuego.mp3" preload="auto"></audio>
+
+  <!-- 🎶 Música de fondo -->
+  <audio id="musica-fondo" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+    Tu navegador no soporta audio en HTML5.
+  </audio>
+  <!-- 🎶 -->
+
+  <!-- Script para sonido del botón de biblioteca -->
+  <script>
+    const boton = document.querySelector(".boton-biblioteca");
+    const sonido = document.getElementById("hover-sound");
+
+    boton.addEventListener("mouseenter", () => {
+      sonido.currentTime = 0;
+      sonido.play();
+    });
+
+    boton.addEventListener("mouseleave", () => {
+      sonido.pause();
+      sonido.currentTime = 0;
+    });
+  </script>
+
+  <!-- Script para sonido del botón de minijuego -->
+  <script>
+    const botonMinijuego = document.querySelector(".boton-minijuego");
+    const sonidoMinijuego = document.getElementById("hover-sound-minijuego");
+
+    botonMinijuego.addEventListener("mouseenter", () => {
+      sonidoMinijuego.currentTime = 0;
+      sonidoMinijuego.play();
+    });
+
+    botonMinijuego.addEventListener("mouseleave", () => {
+      sonidoMinijuego.pause();
+      sonidoMinijuego.currentTime = 0;
+    });
+  </script>
+
+  <!-- Script para iniciar música tras el primer clic -->
+  <script>
+    const musicaFondo = document.getElementById("musica-fondo");
+    document.addEventListener("click", () => {
+      musicaFondo.play();
+    }, { once: true });
+  </script>
+
+</body>
+</html>
+

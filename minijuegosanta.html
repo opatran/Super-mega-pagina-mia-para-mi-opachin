@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego Navidad</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-image: url('fondosanta.png');
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      cursor: default;
+      position: relative;
+    }
+
+    .contenedor-juego {
+      width: 1200px;
+      margin: 20px auto;
+      position: relative;
+    }
+
+    #boton-iniciar {
+      width: 200px;
+      cursor: pointer;
+      display: block;
+      margin: 20px auto;
+    }
+
+    #minipantalla {
+      width: 100%;
+      height: 600px;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid rgba(255,255,255,0.2); 
+      background-image: url('minipantalla.png');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+    }
+
+    .santa {
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      cursor: pointer;
+    }
+
+    #letrero-izquierdo {
+      position: absolute;
+      top: 10px;
+      left: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      z-index: 10;
+    }
+
+    #letrero-derecho {
+      position: absolute;
+      top: 10px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 2px 2px 5px black;
+      z-index: 10;
+    }
+
+    #mensaje-final {
+      position: fixed;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 60px;
+      font-weight: bold;
+      color: red;
+      text-shadow: 2px 2px 8px yellow, 0 0 10px orange;
+      z-index: 999;
+      display: none;
+      cursor: pointer;
+    }
+
+    .boton-volver-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .boton-volver {
+      width: 200px;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .boton-volver:hover {
+      transform: scale(1.1);
+    }
+
+    /* --- BOTÓN DE INSTRUCCIONES ABAJO A LA DERECHA --- */
+    #boton-instrucciones {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 100px;
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    #boton-instrucciones:hover {
+      transform: scale(1.1);
+    }
+
+    /* Imagen de instrucciones en el centro */
+    #instrucciones-img {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 90%;
+      max-height: 90%;
+      z-index: 2000;
+      border: 3px solid white;
+      box-shadow: 0 0 20px black;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="contenedor-juego">
+
+    <!-- Botón de inicio -->
+    <img id="boton-iniciar" src="botonminijuego1.png" alt="Iniciar Juego">
+
+    <!-- Contadores -->
+    <div id="letrero-izquierdo">Tiempo: <span id="cronometro">60</span></div>
+    <div id="letrero-derecho">Puntos: <span id="puntuacion">0</span></div>
+
+    <!-- Minipantalla del juego -->
+    <div id="minipantalla"></div>
+
+    <!-- Botón para volver al index.html -->
+    <div class="boton-volver-container">
+      <a href="index.html">
+        <img src="boton-minijuego.png" alt="Volver al inicio" class="boton-volver" id="boton-volver">
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Mensaje de fin de juego -->
+  <div id="mensaje-final"></div>
+
+  <!-- Imagen de instrucciones -->
+  <img id="instrucciones-img" src="instruccionsanta.png" alt="Instrucciones">
+
+  <!-- Botón de instrucciones -->
+  <img id="boton-instrucciones" src="botoninstruccionsanta.png" alt="Ver instrucciones">
+
+  <!-- Alarma -->
+  <audio id="alarma" src="alarma.mp3"></audio>
+
+  <!-- Música del juego -->
+  <audio id="musica-juego" src="santa.mp3" loop></audio>
+
+  <!-- Sonido del hover en el botón de volver -->
+  <audio id="hover-sound-volver" src="hover-minijuego.mp3" preload="auto"></audio>
+
+  <script>
+    let jugando = false;
+    let puntuacion = 0;
+    let tiempo = 60;
+    let intervaloTiempo;
+    let minipantalla = document.getElementById("minipantalla");
+    let botonIniciar = document.getElementById("boton-iniciar");
+    let cronometro = document.getElementById("cronometro");
+    let puntuacionDiv = document.getElementById("puntuacion");
+    let mensaje = document.getElementById("mensaje-final");
+    let alarma = document.getElementById("alarma");
+    let musicaJuego = document.getElementById("musica-juego");
+
+    let haySantasEnPantalla = false;
+
+    function crearSantaMovil() {
+      const santa = document.createElement("img");
+      santa.src = "santa.png";
+      santa.className = "santa";
+
+      const lado = Math.random() < 0.5 ? "izquierda" : "derecha";
+      const y = Math.random() * (minipantalla.clientHeight - 90);
+      let x = lado === "izquierda" ? -90 : minipantalla.clientWidth;
+
+      santa.style.top = y + "px";
+      santa.style.left = x + "px";
+
+      const velocidad = Math.random() * 4 + 3;
+      const direccion = lado === "izquierda" ? 1 : -1;
+
+      santa.addEventListener("click", () => {
+        puntuacion++;
+        puntuacionDiv.textContent = puntuacion;
+        santa.remove();
+      });
+
+      minipantalla.appendChild(santa);
+
+      function mover() {
+        if (!jugando) return;
+        x += velocidad * direccion;
+        santa.style.left = x + "px";
+
+        if ((direccion === 1 && x > minipantalla.clientWidth) ||
+            (direccion === -1 && x < -90)) {
+          santa.remove();
+          return;
+        }
+        requestAnimationFrame(mover);
+      }
+
+      mover();
+    }
+
+    function crearGrupoSantas() {
+      if (!jugando || haySantasEnPantalla) return;
+
+      haySantasEnPantalla = true;
+
+      const numeroSantas = Math.floor(Math.random() * 6) + 2;
+      for (let i = 0; i < numeroSantas; i++) {
+        crearSantaMovil();
+      }
+
+      const siguiente = Math.random() * 4000 + 1000;
+      setTimeout(() => {
+        haySantasEnPantalla = false;
+        crearGrupoSantas();
+      }, siguiente);
+    }
+
+    function iniciarJuego() {
+      jugando = true;
+      puntuacion = 0;
+      tiempo = 60;
+      cronometro.textContent = tiempo;
+      puntuacionDiv.textContent = puntuacion;
+      botonIniciar.disabled = true;
+
+      alarma.currentTime = 0;
+      alarma.play();
+
+      // ▶️ Iniciar música
+      musicaJuego.currentTime = 0;
+      musicaJuego.play();
+
+      crearGrupoSantas();
+
+      intervaloTiempo = setInterval(() => {
+        tiempo--;
+        cronometro.textContent = tiempo;
+        if (tiempo <= 0) {
+          terminarJuego();
+        }
+      }, 1000);
+    }
+
+    function terminarJuego() {
+      jugando = false;
+      clearInterval(intervaloTiempo);
+      botonIniciar.disabled = false;
+
+      const santas = document.querySelectorAll(".santa");
+      santas.forEach(santa => santa.remove());
+
+      alarma.currentTime = 0;
+      alarma.pause();
+
+      // ⏹️ Detener música
+      musicaJuego.pause();
+      musicaJuego.currentTime = 0;
+
+      mensaje.textContent = "¡Juego terminado! Puntuación: " + puntuacion;
+      mensaje.style.display = "block";
+
+      document.body.addEventListener("click", reiniciarPantalla, {once: true});
+    }
+
+    function reiniciarPantalla() {
+      mensaje.style.display = "none";
+    }
+
+    botonIniciar.addEventListener("click", iniciarJuego);
+
+    // Hover en botón volver
+    const botonVolver = document.getElementById("boton-volver");
+    const sonidoHoverVolver = document.getElementById("hover-sound-volver");
+
+    botonVolver.addEventListener("mouseenter", () => {
+      sonidoHoverVolver.currentTime = 0;
+      sonidoHoverVolver.play();
+    });
+
+    botonVolver.addEventListener("mouseleave", () => {
+      sonidoHoverVolver.pause();
+      sonidoHoverVolver.currentTime = 0;
+    });
+
+    // --- INSTRUCCIONES ---
+    const botonInstrucciones = document.getElementById("boton-instrucciones");
+    const instruccionesImg = document.getElementById("instrucciones-img");
+
+    botonInstrucciones.addEventListener("click", (e) => {
+      e.stopPropagation();
+      instruccionesImg.style.display = "block";
+    });
+
+    document.body.addEventListener("click", () => {
+      if (instruccionesImg.style.display === "block") {
+        instruccionesImg.style.display = "none";
+      }
+    });
+
+    instruccionesImg.addEventListener("click", (e) => {
+      e.stopPropagation();
+    });
+  </script>
+
+</body>
+</html>
